@@ -1,6 +1,8 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
+from config import config
+
 
 def start_keyboard() -> InlineKeyboardMarkup:
     """Asosiy menyu: Premium dizayn va vizual tartib"""
@@ -46,25 +48,30 @@ def movie_action_keyboard(movie_title: str, movie_code: int) -> InlineKeyboardMa
     return builder.as_markup()
 
 
-def subscription_keyboard(channels: list) -> InlineKeyboardMarkup:
-    """Obuna bo'limi: Diqqatni tortuvchi va tushunarli dizayn"""
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.utils.keyboard import InlineKeyboardBuilder
+from config import config
+
+
+def subscription_keyboard() -> InlineKeyboardMarkup:
+    """
+    Obuna bo'limi: config.mandatory_channels'dan dinamik oladi.
+    Middleware ichida ham ishlatish mumkin.
+    """
     builder = InlineKeyboardBuilder()
 
-    for i, channel in enumerate(channels, 1):
-        clean_username = str(channel).replace("@", "").replace("https://t.me/", "").strip()
-        url = f"https://t.me/{clean_username}"
-
-        # Har bir kanal uchun alohida dizayn
+    # config.mandatory_channels ichida {'id': ..., 'url': ...} ko'rinishida saqlangan
+    for i, channel in enumerate(config.mandatory_channels, 1):
         builder.row(InlineKeyboardButton(
             text=f"➕ {i}-kanalga obuna bo'lish",
-            url=url
+            url=channel['url']
         ))
 
-    # Tasdiqlash tugmasi ajralib turishi uchun alohida qatorda
+    # Tasdiqlash tugmasi
     builder.row(InlineKeyboardButton(
         text="✅ Obunani tasdiqlash",
-        callback_data="check_subs")
-    )
+        callback_data="check_subs"
+    ))
 
     return builder.as_markup()
 

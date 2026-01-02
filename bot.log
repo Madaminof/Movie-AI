@@ -1,0 +1,553 @@
+2026-01-02 12:20:17,430 - __main__ - INFO - 🚀 AI Movie Vision bot is polling...
+2026-01-02 12:20:17,442 - database.connection - INFO - ✅ Ma'lumotlar bazasi muvaffaqiyatli bog'landi.
+2026-01-02 12:20:17,613 - __main__ - INFO - 🔥 Bot startup bosqichidan o'tdi.
+2026-01-02 12:20:17,614 - aiogram.dispatcher - INFO - Start polling
+2026-01-02 12:20:17,757 - aiogram.dispatcher - INFO - Run polling for bot @Ai_moviee_bot id=8287161482 - 'Movie HD'
+2026-01-02 12:20:23,770 - root - WARNING - Animation failed: 'Settings' object has no attribute 'CHANNEL_USERNAME'
+2026-01-02 12:20:23,771 - middlewares.db_session - ERROR - ❌ Database error in middleware: 'Settings' object has no attribute 'CHANNEL_USERNAME'
+Traceback (most recent call last):
+  File "/Users/junggh/Desktop/Movie Bot/handlers/mainFunctions/cmd_start.py", line 61, in cmd_start
+    reply_markup=start_keyboard()
+  File "/Users/junggh/Desktop/Movie Bot/keyboards/inline.py", line 28, in start_keyboard
+    InlineKeyboardButton(text="💎 Rasmiy kanalimiz", url=f"https://t.me/{config.CHANNEL_USERNAME}")
+                                                                         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/pydantic/main.py", line 1026, in __getattr__
+    raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+AttributeError: 'Settings' object has no attribute 'CHANNEL_USERNAME'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/junggh/Desktop/Movie Bot/middlewares/db_session.py", line 33, in __call__
+    result = await handler(event, data)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/middlewares/check_sub.py", line 37, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/event/telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/event/handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/dispatcher.py", line 283, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/router.py", line 161, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/router.py", line 153, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/router.py", line 189, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/router.py", line 161, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/router.py", line 153, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/router.py", line 181, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/event/telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/event/handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/handlers/mainFunctions/cmd_start.py", line 65, in cmd_start
+    await message.answer(welcome_text, reply_markup=start_keyboard())
+                                                    ~~~~~~~~~~~~~~^^
+  File "/Users/junggh/Desktop/Movie Bot/keyboards/inline.py", line 28, in start_keyboard
+    InlineKeyboardButton(text="💎 Rasmiy kanalimiz", url=f"https://t.me/{config.CHANNEL_USERNAME}")
+                                                                         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/pydantic/main.py", line 1026, in __getattr__
+    raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+AttributeError: 'Settings' object has no attribute 'CHANNEL_USERNAME'
+2026-01-02 12:20:23,785 - aiogram.event - INFO - Update id=147428327 is not handled. Duration 455 ms by bot id=8287161482
+2026-01-02 12:20:23,786 - aiogram.event - ERROR - Cause exception while process update id=147428327 by bot id=8287161482
+AttributeError: 'Settings' object has no attribute 'CHANNEL_USERNAME'
+Traceback (most recent call last):
+  File "/Users/junggh/Desktop/Movie Bot/handlers/mainFunctions/cmd_start.py", line 61, in cmd_start
+    reply_markup=start_keyboard()
+  File "/Users/junggh/Desktop/Movie Bot/keyboards/inline.py", line 28, in start_keyboard
+    InlineKeyboardButton(text="💎 Rasmiy kanalimiz", url=f"https://t.me/{config.CHANNEL_USERNAME}")
+                                                                         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/pydantic/main.py", line 1026, in __getattr__
+    raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+AttributeError: 'Settings' object has no attribute 'CHANNEL_USERNAME'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/dispatcher.py", line 320, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/dispatcher.py", line 164, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<7 lines>...
+    )
+    ^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/middlewares/error.py", line 27, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/middlewares/user_context.py", line 58, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/fsm/middleware.py", line 43, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/middlewares/db_session.py", line 43, in __call__
+    raise e
+  File "/Users/junggh/Desktop/Movie Bot/middlewares/db_session.py", line 33, in __call__
+    result = await handler(event, data)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/middlewares/check_sub.py", line 37, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/event/telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/event/handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/dispatcher.py", line 283, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/router.py", line 161, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/router.py", line 153, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/router.py", line 189, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/router.py", line 161, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/router.py", line 153, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/router.py", line 181, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/event/telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/event/handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/handlers/mainFunctions/cmd_start.py", line 65, in cmd_start
+    await message.answer(welcome_text, reply_markup=start_keyboard())
+                                                    ~~~~~~~~~~~~~~^^
+  File "/Users/junggh/Desktop/Movie Bot/keyboards/inline.py", line 28, in start_keyboard
+    InlineKeyboardButton(text="💎 Rasmiy kanalimiz", url=f"https://t.me/{config.CHANNEL_USERNAME}")
+                                                                         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/pydantic/main.py", line 1026, in __getattr__
+    raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+AttributeError: 'Settings' object has no attribute 'CHANNEL_USERNAME'
+2026-01-02 12:20:31,409 - root - WARNING - Animation failed: 'Settings' object has no attribute 'CHANNEL_USERNAME'
+2026-01-02 12:20:31,411 - middlewares.db_session - ERROR - ❌ Database error in middleware: 'Settings' object has no attribute 'CHANNEL_USERNAME'
+Traceback (most recent call last):
+  File "/Users/junggh/Desktop/Movie Bot/handlers/mainFunctions/cmd_start.py", line 61, in cmd_start
+    reply_markup=start_keyboard()
+  File "/Users/junggh/Desktop/Movie Bot/keyboards/inline.py", line 28, in start_keyboard
+    InlineKeyboardButton(text="💎 Rasmiy kanalimiz", url=f"https://t.me/{config.CHANNEL_USERNAME}")
+                                                                         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/pydantic/main.py", line 1026, in __getattr__
+    raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+AttributeError: 'Settings' object has no attribute 'CHANNEL_USERNAME'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/junggh/Desktop/Movie Bot/middlewares/db_session.py", line 33, in __call__
+    result = await handler(event, data)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/middlewares/check_sub.py", line 37, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/event/telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/event/handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/dispatcher.py", line 283, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/router.py", line 161, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/router.py", line 153, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/router.py", line 189, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/router.py", line 161, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/router.py", line 153, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/router.py", line 181, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/event/telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/event/handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/handlers/mainFunctions/cmd_start.py", line 65, in cmd_start
+    await message.answer(welcome_text, reply_markup=start_keyboard())
+                                                    ~~~~~~~~~~~~~~^^
+  File "/Users/junggh/Desktop/Movie Bot/keyboards/inline.py", line 28, in start_keyboard
+    InlineKeyboardButton(text="💎 Rasmiy kanalimiz", url=f"https://t.me/{config.CHANNEL_USERNAME}")
+                                                                         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/pydantic/main.py", line 1026, in __getattr__
+    raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+AttributeError: 'Settings' object has no attribute 'CHANNEL_USERNAME'
+2026-01-02 12:20:31,419 - aiogram.event - INFO - Update id=147428328 is not handled. Duration 178 ms by bot id=8287161482
+2026-01-02 12:20:31,420 - aiogram.event - ERROR - Cause exception while process update id=147428328 by bot id=8287161482
+AttributeError: 'Settings' object has no attribute 'CHANNEL_USERNAME'
+Traceback (most recent call last):
+  File "/Users/junggh/Desktop/Movie Bot/handlers/mainFunctions/cmd_start.py", line 61, in cmd_start
+    reply_markup=start_keyboard()
+  File "/Users/junggh/Desktop/Movie Bot/keyboards/inline.py", line 28, in start_keyboard
+    InlineKeyboardButton(text="💎 Rasmiy kanalimiz", url=f"https://t.me/{config.CHANNEL_USERNAME}")
+                                                                         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/pydantic/main.py", line 1026, in __getattr__
+    raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+AttributeError: 'Settings' object has no attribute 'CHANNEL_USERNAME'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/dispatcher.py", line 320, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/dispatcher.py", line 164, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<7 lines>...
+    )
+    ^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/middlewares/error.py", line 27, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/middlewares/user_context.py", line 58, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/fsm/middleware.py", line 43, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/middlewares/db_session.py", line 43, in __call__
+    raise e
+  File "/Users/junggh/Desktop/Movie Bot/middlewares/db_session.py", line 33, in __call__
+    result = await handler(event, data)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/middlewares/check_sub.py", line 37, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/event/telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/event/handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/dispatcher.py", line 283, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/router.py", line 161, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/router.py", line 153, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/router.py", line 189, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/router.py", line 161, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/router.py", line 153, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/router.py", line 181, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/event/telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/event/handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/handlers/mainFunctions/cmd_start.py", line 65, in cmd_start
+    await message.answer(welcome_text, reply_markup=start_keyboard())
+                                                    ~~~~~~~~~~~~~~^^
+  File "/Users/junggh/Desktop/Movie Bot/keyboards/inline.py", line 28, in start_keyboard
+    InlineKeyboardButton(text="💎 Rasmiy kanalimiz", url=f"https://t.me/{config.CHANNEL_USERNAME}")
+                                                                         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/pydantic/main.py", line 1026, in __getattr__
+    raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+AttributeError: 'Settings' object has no attribute 'CHANNEL_USERNAME'
+2026-01-02 12:22:27,090 - __main__ - INFO - 🚀 AI Movie Vision bot is polling...
+2026-01-02 12:22:27,099 - database.connection - INFO - ✅ Ma'lumotlar bazasi muvaffaqiyatli bog'landi.
+2026-01-02 12:22:27,273 - __main__ - INFO - 🔥 Bot startup bosqichidan o'tdi.
+2026-01-02 12:22:27,274 - aiogram.dispatcher - INFO - Start polling
+2026-01-02 12:22:27,410 - aiogram.dispatcher - INFO - Run polling for bot @Ai_moviee_bot id=8287161482 - 'Movie HD'
+2026-01-02 12:22:32,369 - aiogram.event - INFO - Update id=147428329 is handled. Duration 722 ms by bot id=8287161482
+2026-01-02 12:22:34,657 - aiogram.event - INFO - Update id=147428330 is handled. Duration 370 ms by bot id=8287161482
+2026-01-02 12:22:42,994 - aiogram.event - INFO - Update id=147428331 is handled. Duration 453 ms by bot id=8287161482
+2026-01-02 12:22:48,538 - aiogram.event - INFO - Update id=147428332 is handled. Duration 324 ms by bot id=8287161482
+2026-01-02 12:22:50,470 - aiogram.event - INFO - Update id=147428333 is handled. Duration 491 ms by bot id=8287161482
+2026-01-02 12:22:51,789 - aiogram.event - INFO - Update id=147428334 is handled. Duration 456 ms by bot id=8287161482
+2026-01-02 12:23:00,196 - aiogram.event - INFO - Update id=147428335 is handled. Duration 396 ms by bot id=8287161482
+2026-01-02 12:23:01,738 - aiogram.event - INFO - Update id=147428336 is handled. Duration 382 ms by bot id=8287161482
+2026-01-02 12:23:08,245 - aiogram.event - INFO - Update id=147428337 is handled. Duration 325 ms by bot id=8287161482
+2026-01-02 12:23:09,648 - aiogram.event - INFO - Update id=147428338 is handled. Duration 509 ms by bot id=8287161482
+2026-01-02 12:23:10,627 - aiogram.event - INFO - Update id=147428339 is handled. Duration 358 ms by bot id=8287161482
+2026-01-02 12:23:23,049 - middlewares.db_session - ERROR - ❌ Database error in middleware: subscription_keyboard() missing 1 required positional argument: 'channels'
+Traceback (most recent call last):
+  File "/Users/junggh/Desktop/Movie Bot/middlewares/db_session.py", line 33, in __call__
+    result = await handler(event, data)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/middlewares/check_sub.py", line 82, in __call__
+    return await self._send_subscription_alert(real_event)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/middlewares/check_sub.py", line 92, in _send_subscription_alert
+    markup = subscription_keyboard()
+TypeError: subscription_keyboard() missing 1 required positional argument: 'channels'
+2026-01-02 12:23:23,054 - aiogram.event - INFO - Update id=147428340 is not handled. Duration 185 ms by bot id=8287161482
+2026-01-02 12:23:23,054 - aiogram.event - ERROR - Cause exception while process update id=147428340 by bot id=8287161482
+TypeError: subscription_keyboard() missing 1 required positional argument: 'channels'
+Traceback (most recent call last):
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/dispatcher.py", line 320, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/dispatcher.py", line 164, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<7 lines>...
+    )
+    ^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/middlewares/error.py", line 27, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/middlewares/user_context.py", line 58, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/fsm/middleware.py", line 43, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/middlewares/db_session.py", line 43, in __call__
+    raise e
+  File "/Users/junggh/Desktop/Movie Bot/middlewares/db_session.py", line 33, in __call__
+    result = await handler(event, data)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/middlewares/check_sub.py", line 82, in __call__
+    return await self._send_subscription_alert(real_event)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/middlewares/check_sub.py", line 92, in _send_subscription_alert
+    markup = subscription_keyboard()
+TypeError: subscription_keyboard() missing 1 required positional argument: 'channels'
+2026-01-02 12:23:29,225 - middlewares.db_session - ERROR - ❌ Database error in middleware: subscription_keyboard() missing 1 required positional argument: 'channels'
+Traceback (most recent call last):
+  File "/Users/junggh/Desktop/Movie Bot/middlewares/db_session.py", line 33, in __call__
+    result = await handler(event, data)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/middlewares/check_sub.py", line 55, in __call__
+    return await self._send_subscription_alert(real_event)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/middlewares/check_sub.py", line 92, in _send_subscription_alert
+    markup = subscription_keyboard()
+TypeError: subscription_keyboard() missing 1 required positional argument: 'channels'
+2026-01-02 12:23:29,227 - aiogram.event - INFO - Update id=147428341 is not handled. Duration 3 ms by bot id=8287161482
+2026-01-02 12:23:29,228 - aiogram.event - ERROR - Cause exception while process update id=147428341 by bot id=8287161482
+TypeError: subscription_keyboard() missing 1 required positional argument: 'channels'
+Traceback (most recent call last):
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/dispatcher.py", line 320, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/dispatcher.py", line 164, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<7 lines>...
+    )
+    ^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/middlewares/error.py", line 27, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/middlewares/user_context.py", line 58, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/fsm/middleware.py", line 43, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/middlewares/db_session.py", line 43, in __call__
+    raise e
+  File "/Users/junggh/Desktop/Movie Bot/middlewares/db_session.py", line 33, in __call__
+    result = await handler(event, data)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/middlewares/check_sub.py", line 55, in __call__
+    return await self._send_subscription_alert(real_event)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/middlewares/check_sub.py", line 92, in _send_subscription_alert
+    markup = subscription_keyboard()
+TypeError: subscription_keyboard() missing 1 required positional argument: 'channels'
+2026-01-02 12:23:42,413 - middlewares.db_session - ERROR - ❌ Database error in middleware: subscription_keyboard() missing 1 required positional argument: 'channels'
+Traceback (most recent call last):
+  File "/Users/junggh/Desktop/Movie Bot/middlewares/db_session.py", line 33, in __call__
+    result = await handler(event, data)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/middlewares/check_sub.py", line 82, in __call__
+    return await self._send_subscription_alert(real_event)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/middlewares/check_sub.py", line 92, in _send_subscription_alert
+    markup = subscription_keyboard()
+TypeError: subscription_keyboard() missing 1 required positional argument: 'channels'
+2026-01-02 12:23:42,416 - aiogram.event - INFO - Update id=147428342 is not handled. Duration 186 ms by bot id=8287161482
+2026-01-02 12:23:42,417 - aiogram.event - ERROR - Cause exception while process update id=147428342 by bot id=8287161482
+TypeError: subscription_keyboard() missing 1 required positional argument: 'channels'
+Traceback (most recent call last):
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/dispatcher.py", line 320, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/dispatcher.py", line 164, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<7 lines>...
+    )
+    ^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/middlewares/error.py", line 27, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/middlewares/user_context.py", line 58, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/fsm/middleware.py", line 43, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/middlewares/db_session.py", line 43, in __call__
+    raise e
+  File "/Users/junggh/Desktop/Movie Bot/middlewares/db_session.py", line 33, in __call__
+    result = await handler(event, data)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/middlewares/check_sub.py", line 82, in __call__
+    return await self._send_subscription_alert(real_event)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/middlewares/check_sub.py", line 92, in _send_subscription_alert
+    markup = subscription_keyboard()
+TypeError: subscription_keyboard() missing 1 required positional argument: 'channels'
+2026-01-02 12:26:36,629 - __main__ - INFO - 🚀 AI Movie Vision bot is polling...
+2026-01-02 12:26:36,636 - database.connection - INFO - ✅ Ma'lumotlar bazasi muvaffaqiyatli bog'landi.
+2026-01-02 12:26:36,825 - __main__ - INFO - 🔥 Bot startup bosqichidan o'tdi.
+2026-01-02 12:26:36,827 - aiogram.dispatcher - INFO - Start polling
+2026-01-02 12:26:36,970 - aiogram.dispatcher - INFO - Run polling for bot @Ai_moviee_bot id=8287161482 - 'Movie HD'
+2026-01-02 12:26:40,713 - aiogram.event - INFO - Update id=147428343 is handled. Duration 647 ms by bot id=8287161482
+2026-01-02 12:26:43,387 - aiogram.event - INFO - Update id=147428344 is handled. Duration 459 ms by bot id=8287161482
+2026-01-02 12:28:41,078 - __main__ - INFO - 🚀 AI Movie Vision bot is polling...
+2026-01-02 12:28:41,087 - database.connection - INFO - ✅ Ma'lumotlar bazasi muvaffaqiyatli bog'landi.
+2026-01-02 12:28:41,288 - __main__ - INFO - 🔥 Bot startup bosqichidan o'tdi.
+2026-01-02 12:28:41,289 - aiogram.dispatcher - INFO - Start polling
+2026-01-02 12:28:41,456 - aiogram.dispatcher - INFO - Run polling for bot @Ai_moviee_bot id=8287161482 - 'Movie HD'
+2026-01-02 12:28:47,051 - aiogram.event - INFO - Update id=147428345 is handled. Duration 625 ms by bot id=8287161482
+2026-01-02 12:28:49,381 - aiogram.event - INFO - Update id=147428346 is handled. Duration 568 ms by bot id=8287161482
+2026-01-02 12:29:38,575 - __main__ - INFO - 🚀 AI Movie Vision bot is polling...
+2026-01-02 12:29:38,584 - database.connection - INFO - ✅ Ma'lumotlar bazasi muvaffaqiyatli bog'landi.
+2026-01-02 12:29:38,974 - __main__ - INFO - 🔥 Bot startup bosqichidan o'tdi.
+2026-01-02 12:29:38,974 - aiogram.dispatcher - INFO - Start polling
+2026-01-02 12:29:39,118 - aiogram.dispatcher - INFO - Run polling for bot @Ai_moviee_bot id=8287161482 - 'Movie HD'
+2026-01-02 12:29:42,157 - middlewares.db_session - ERROR - ❌ Database error in middleware: subscription_keyboard() missing 1 required positional argument: 'channels'
+Traceback (most recent call last):
+  File "/Users/junggh/Desktop/Movie Bot/middlewares/db_session.py", line 33, in __call__
+    result = await handler(event, data)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/middlewares/check_sub.py", line 82, in __call__
+    return await self._send_subscription_alert(real_event)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/middlewares/check_sub.py", line 92, in _send_subscription_alert
+    markup = subscription_keyboard()
+TypeError: subscription_keyboard() missing 1 required positional argument: 'channels'
+2026-01-02 12:29:42,162 - aiogram.event - INFO - Update id=147428347 is not handled. Duration 436 ms by bot id=8287161482
+2026-01-02 12:29:42,162 - aiogram.event - ERROR - Cause exception while process update id=147428347 by bot id=8287161482
+TypeError: subscription_keyboard() missing 1 required positional argument: 'channels'
+Traceback (most recent call last):
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/dispatcher.py", line 320, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/dispatcher.py", line 164, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<7 lines>...
+    )
+    ^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/middlewares/error.py", line 27, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/dispatcher/middlewares/user_context.py", line 58, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/venv/lib/python3.13/site-packages/aiogram/fsm/middleware.py", line 43, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/middlewares/db_session.py", line 43, in __call__
+    raise e
+  File "/Users/junggh/Desktop/Movie Bot/middlewares/db_session.py", line 33, in __call__
+    result = await handler(event, data)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/middlewares/check_sub.py", line 82, in __call__
+    return await self._send_subscription_alert(real_event)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/junggh/Desktop/Movie Bot/middlewares/check_sub.py", line 92, in _send_subscription_alert
+    markup = subscription_keyboard()
+TypeError: subscription_keyboard() missing 1 required positional argument: 'channels'
+2026-01-02 12:34:57,890 - __main__ - INFO - 🚀 AI Movie Vision bot is polling...
+2026-01-02 12:34:57,903 - database.connection - INFO - ✅ Ma'lumotlar bazasi muvaffaqiyatli bog'landi.
+2026-01-02 12:34:58,102 - __main__ - INFO - 🔥 Bot startup bosqichidan o'tdi.
+2026-01-02 12:34:58,102 - aiogram.dispatcher - INFO - Start polling
+2026-01-02 12:34:58,241 - aiogram.dispatcher - INFO - Run polling for bot @Ai_moviee_bot id=8287161482 - 'Movie HD'
+2026-01-02 12:35:01,975 - aiogram.event - INFO - Update id=147428348 is handled. Duration 685 ms by bot id=8287161482
+2026-01-02 12:35:05,627 - aiogram.event - INFO - Update id=147428349 is handled. Duration 439 ms by bot id=8287161482
+2026-01-02 12:35:08,346 - aiogram.event - INFO - Update id=147428350 is handled. Duration 490 ms by bot id=8287161482
+2026-01-02 12:35:10,814 - aiogram.event - INFO - Update id=147428351 is handled. Duration 625 ms by bot id=8287161482
+2026-01-02 12:35:14,502 - aiogram.event - INFO - Update id=147428352 is handled. Duration 157 ms by bot id=8287161482
+2026-01-02 12:35:23,949 - aiogram.event - INFO - Update id=147428353 is handled. Duration 427 ms by bot id=8287161482
+2026-01-02 12:35:25,511 - aiogram.event - INFO - Update id=147428354 is handled. Duration 330 ms by bot id=8287161482
+2026-01-02 12:35:26,996 - aiogram.event - INFO - Update id=147428355 is handled. Duration 339 ms by bot id=8287161482
+2026-01-02 12:35:28,067 - aiogram.event - INFO - Update id=147428356 is handled. Duration 342 ms by bot id=8287161482
+2026-01-02 12:35:32,157 - aiogram.event - INFO - Update id=147428357 is handled. Duration 334 ms by bot id=8287161482
+2026-01-02 12:35:40,283 - aiogram.event - INFO - Update id=147428358 is handled. Duration 295 ms by bot id=8287161482
+2026-01-02 12:35:48,051 - aiogram.event - INFO - Update id=147428359 is handled. Duration 168 ms by bot id=8287161482
+2026-01-02 12:35:50,106 - aiogram.event - INFO - Update id=147428360 is handled. Duration 457 ms by bot id=8287161482
+2026-01-02 12:35:54,782 - aiogram.event - INFO - Update id=147428361 is handled. Duration 660 ms by bot id=8287161482

@@ -1,100 +1,130 @@
 import logging
+from typing import Union
 from aiogram import Router, types, F
+from aiogram.exceptions import TelegramEntityTooLarge, TelegramBadRequest
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import update, insert, select
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy import update, select
+from sqlalchemy.dialects.sqlite import insert as sqlite_insert  # SQLite uchun maxsus insert
 
 from database.models import Movie, MovieView
-from database.crud import get_movie_by_code
 from keyboards.inline import movie_action_keyboard
 
 router = Router()
 
 
-async def process_movie_delivery(event: [types.Message, types.CallbackQuery], movie: Movie, session: AsyncSession):
+async def process_movie_delivery(
+        event: Union[types.Message, types.CallbackQuery],
+        movie: Movie,
+        session: AsyncSession
+):
     """
-    Kino yetkazib berish, unikal ko'rishni hisoblash va UI ko'rsatish uchun markaziy funksiya.
+    Kino yetkazib berishning universal va barqaror tizimi.
     """
     user_id = event.from_user.id
-    chat_id = event.message.chat.id if isinstance(event, types.CallbackQuery) else event.chat.id
+    message = event.message if isinstance(event, types.CallbackQuery) else event
 
-    # 1. Vizual effekt: Bot video yuklayotganini ko'rsatadi
-    await event.bot.send_chat_action(chat_id=chat_id, action="upload_video")
-
-    # 2. Unikal ko'rishlar mantig'i (Tranzaksiya ichida)
+    # 1. Ob'ektni sessiyaga qayta bog'lash va yangilash (MissingGreenlet davosi)
     try:
-        # MovieView jadvaliga yozish orqali unikal ko'rishni tekshiramiz
-        await session.execute(
-            insert(MovieView).values(user_id=user_id, movie_id=movie.id)
-        )
-        # Agar yuqoridagi qator xato (IntegrityError) bermasa, demak bu yangi ko'rish
-        await session.execute(
-            update(Movie).where(Movie.id == movie.id).values(views=Movie.views + 1)
-        )
-        await session.commit()
-    except IntegrityError:
-        # Foydalanuvchi bu kinoni oldin ko'rgan, shunchaki o'tkazib yuboramiz
-        await session.rollback()
+        # Bu qator ob'ektni sessiyaga qayta yuklaydi va atributlarni o'qishda xatoni oldini oladi
+        await session.merge(movie)
+        await session.refresh(movie)
+    except Exception as e:
+        logging.error(f"Ob'ektni yangilashda xato: {e}")
 
-    # Yangilangan ko'rishlar soni bilan caption tayyorlash
-    await session.refresh(movie)
+    # Chat Action: Video yuklanayotganini ko'rsatish
+    await message.bot.send_chat_action(chat_id=message.chat.id, action="upload_video")
+
+    # 2. Statistika: Unikal ko'rishni hisoblash (SQLite uchun moslangan)
+    try:
+        # SQLite uchun INSERT OR IGNORE logikasi
+        view_stmt = sqlite_insert(MovieView).values(
+            user_id=user_id,
+            movie_id=movie.id
+        ).on_conflict_do_nothing()
+
+        view_result = await session.execute(view_stmt)
+
+        if view_result.rowcount > 0:  # Agar yangi ko'rish bo'lsa
+            await session.execute(
+                update(Movie).where(Movie.id == movie.id).values(views=Movie.views + 1)
+            )
+            # O'zgarishlarni darrov bazaga yozamiz
+            await session.commit()
+            await session.refresh(movie)
+    except Exception as e:
+        await session.rollback()
+        logging.error(f"Statistika yangilashda xato: {e}")
+
+    # 3. Caption UI (Premium Dizayn)
+    # Atributlarni o'zgaruvchiga olib olamiz (Xavfsizlik uchun)
+    title = movie.title.upper() if movie.title else "NOMA'LUM KINO"
+    code = movie.code
+    views = movie.views
 
     caption = (
-        f"🎬 <b>{movie.title.upper()}</b>\n"
+        f"🎬 <b>{title}</b>\n"
         f"━━━━━━━━━━━━━━━━━━━━\n"
-        f"🆔 <b>Kino kodi:</b> <code>{movie.code}</code>\n"
-        f"👁 <b>Ko'rildi:</b> <code>{movie.views:,}</code> marta\n"
-        f"🎭 <b>Janr:</b> #Kino #Premyera\n"
+        f"🆔 <b>Kino kodi:</b> <code>{code}</code>\n"
+        f"👁 <b>Ko'rilgan:</b> <code>{views:,}</code> marta\n"
+        f"⭐ <b>Sifati:</b> <code>Full HD</code>\n"
         f"📡 <b>Kanal:</b> @android_notes_developer\n"
         f"━━━━━━━━━━━━━━━━━━━━\n"
         f"🍿 <b>Yoqimli tomosha tilaymiz!</b>"
     )
 
-    # 3. Videoni yuborish (Message yoki CallbackQuery ligiga qarab)
-    reply_markup = movie_action_keyboard(movie.title, movie.code)
+    reply_markup = movie_action_keyboard(title, code)
 
+    # 4. Videoni yuborish
     try:
+        await message.answer_video(
+            video=movie.file_id,
+            caption=caption,
+            reply_markup=reply_markup,
+            parse_mode="HTML"
+        )
         if isinstance(event, types.CallbackQuery):
-            await event.message.answer_video(video=movie.file_id, caption=caption, reply_markup=reply_markup)
-            await event.answer()  # Callback aylanib turmasligi uchun
-        else:
-            await event.answer_video(video=movie.file_id, caption=caption, reply_markup=reply_markup)
+            await event.answer()
+    except TelegramEntityTooLarge:
+        await message.answer("⚠️ Kechirasiz, video fayl hajmi juda katta (20MB+).")
+    except TelegramBadRequest as e:
+        logging.error(f"Video yuborishda BadRequest: {e}")
+        await message.answer("⚠️ Video fayl bazadan o'chirilgan bo'lishi mumkin.")
     except Exception as e:
-        logging.error(f"Video yuborishda xato: {e}")
-        error_text = "⚠️ Video faylda xatolik (file_id noto'g'ri yoki o'chirilgan)."
-        if isinstance(event, types.CallbackQuery):
-            await event.message.answer(error_text)
-        else:
-            await event.answer(error_text)
+        logging.error(f"Kutilmagan xato: {e}")
+        await message.answer("❌ Texnik xatolik tufayli video yuborilmadi.")
 
 
 # --- HANDLERLAR ---
 
 @router.message(F.text.isdigit())
-async def search_by_text_handler(message: types.Message, session: AsyncSession):
-    """Kino kodini raqam ko'rinishida yuborganda"""
+async def search_by_code_handler(message: types.Message, session: AsyncSession):
+    """Kino kodini qidirish"""
     movie_code = int(message.text)
-    movie = await get_movie_by_code(session, movie_code)
+
+    # selectinload ishlatish keshdagi xatoliklarni kamaytiradi
+    stmt = select(Movie).where(Movie.code == movie_code)
+    result = await session.execute(stmt)
+    movie = result.scalar_one_or_none()
 
     if movie:
         await process_movie_delivery(message, movie, session)
     else:
-        not_found_text = (
-            "⚠️ <b>KINO TOPILMADI</b>\n"
-            "━━━━━━━━━━━━━━━━━━━━\n"
-            f"Kod: <b>{movie_code}</b>\n\n"
-            "🧐 <i>Kod xato kiritilgan yoki film bazadan o'chirilgan bo'lishi mumkin.</i>"
+        await message.answer(
+            f"🔍 <b>Kod: {movie_code}</b>\n\n"
+            "Afsuski, bu kod bo'yicha hech qanday film topilmadi. 😔"
         )
-        await message.answer(not_found_text)
 
 
 @router.callback_query(F.data.startswith("movie_"))
 async def search_by_callback_handler(callback: types.CallbackQuery, session: AsyncSession):
-    """Tugma (masalan, Random orqali) bosilganda"""
-    movie_code = int(callback.data.split("_")[1])
-    movie = await get_movie_by_code(session, movie_code)
+    """Tugma orqali kino ko'rish"""
+    movie_id = int(callback.data.split("_")[1])
+
+    stmt = select(Movie).where(Movie.id == movie_id)
+    result = await session.execute(stmt)
+    movie = result.scalar_one_or_none()
 
     if movie:
         await process_movie_delivery(callback, movie, session)
     else:
-        await callback.answer("❌ Film topilmadi yoki o'chirilgan!", show_alert=True)
+        await callback.answer("❌ Film bazadan o'chirilgan!", show_alert=True)

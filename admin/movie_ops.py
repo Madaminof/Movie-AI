@@ -1,4 +1,5 @@
 import re
+import logging
 from aiogram import Router, types, F
 from aiogram.fsm.context import FSMContext
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -11,65 +12,72 @@ router = Router()
 
 
 def get_back_btn():
-    return InlineKeyboardBuilder().add(
-        types.InlineKeyboardButton(text="❌ Bekor qilish", callback_data="admin_menu")
-    ).as_markup()
+    builder = InlineKeyboardBuilder()
+    builder.row(types.InlineKeyboardButton(text="🔙 Admin Menyuga Qaytish", callback_data="admin_menu"))
+    return builder.as_markup()
 
 
 @router.callback_query(F.data == "admin_add_movie")
 async def start_movie_add(callback: types.CallbackQuery, state: FSMContext):
     await state.set_state(AddMovie.waiting_for_video)
-    await callback.message.edit_text(
-        "📽 <b>Kino qo'shish tizimi</b>\n\n"
-        "Siz quyidagicha qo'shishingiz mumkin:\n"
-        "1️⃣ Videoni o'zini yuboring (keyin ma'lumot so'rayman).\n"
-        "2️⃣ Videoni <b>Forward</b> qiling (nomidan o'zim ajratib olaman).\n"
-        "3️⃣ Videoga izoh (caption) yozib yuboring.\n\n"
-        "📝 <i>Masalan: '545 O'rgimchak odam'</i>",
-        reply_markup=get_back_btn()
+
+    text = (
+        "📥 <b>YANGI KINO QO'SHISH TIZIMI</b>\n"
+        "━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Admin, videoni quyidagi usullarda yuborishingiz mumkin:\n\n"
+        "✅ <b>Avtomatik usul:</b>\n"
+        "Videoni yuboring va izohiga (caption) <code>KOD NOMI</code> yozing.\n"
+        "<i>Misol: 545 O'rgimchak odam</i>\n\n"
+        "✅ <b>Oddiy usul:</b>\n"
+        "Faqat videoni o'zini yuboring, ma'lumotlarni keyingi bosqichda so'rayman.\n\n"
+        "⚠️ <i>Eslatma: Video fayl yoki Document ko'rinishida yuborish mumkin.</i>"
     )
+
+    await callback.message.edit_text(text, reply_markup=get_back_btn(), parse_mode="HTML")
 
 
 @router.message(AddMovie.waiting_for_video, F.video | F.document)
 async def process_movie_video(message: types.Message, state: FSMContext, session: AsyncSession):
-    # Video yoki Document ekanligini aniqlash
     media = message.video if message.video else message.document
     file_id = media.file_id
-
-    # Nomi yoki sarlavhasini olish (Caption bo'lmasa fayl nomi)
     raw_text = message.caption if message.caption else getattr(media, 'file_name', '')
 
+    # Regex orqali tekshirish
     if raw_text:
-        # Regular expression orqali matn boshidagi raqamni (kodni) va qolgan matnni (nomini) ajratish
-        # Masalan: "125 Forsaj 9" -> group(1): 125, group(2): Forsaj 9
         match = re.search(r'^(\d+)\s+(.+)$', raw_text.strip())
-
         if match:
             code = int(match.group(1))
-            title = match.group(2).replace('.mp4', '').replace('.mkv', '').strip()
+            title = match.group(2).replace('.mp4', '').replace('.mkv', '').strip().upper()
 
             try:
                 await session.execute(insert(Movie).values(code=code, title=title, file_id=file_id))
                 await session.commit()
                 await state.clear()
-                return await message.answer(
-                    f"✅ <b>Aqlli tizim orqali saqlandi!</b>\n\n"
-                    f"🆔 Kod: <code>{code}</code>\n"
-                    f"🎬 Nomi: <b>{title}</b>",
-                    reply_markup=get_back_btn()
-                )
+
+                success_text = (
+                    "✅ <b>KINO BAZAGA QO'SHILDI!</b>\n"
+                    "━━━━━━━━━━━━━━━━━━━━\n"
+                    "🆔 <b>Kino kodi:</b> <code>{code}</code>\n"
+                    "🎬 <b>Nomi:</b> <code>{title}</code>\n"
+                    "💎 <b>Holati:</b> Tayyor"
+                ).format(code=code, title=title)
+
+                return await message.answer(success_text, reply_markup=get_back_btn(), parse_mode="HTML")
             except Exception:
                 await session.rollback()
-                return await message.answer("❌ Xatolik: Bu kod bazada bor yoki boshqa xato.")
+                return await message.answer("❌ <b>XATO:</b> Bu kod (ID) bazada mavjud!", parse_mode="HTML")
 
-    # Agar matndan ma'lumot ajratib bo'lmasa, navbatma-navbat so'raymiz
+    # Agar ma'lumot ajratib bo'lmasa
     await state.update_data(file_id=file_id)
     await state.set_state(AddMovie.waiting_for_details)
+
     await message.answer(
-        "🧐 Videodan ma'lumotlarni aniqlab bo'lmadi.\n\n"
-        "Iltimos, kino kodi va nomini mana bunday yuboring:\n"
-        "<code>KOD NOMI</code> (masalan: 125 Forsaj 9)",
-        reply_markup=get_back_btn()
+        "🧐 <b>Ma'lumotlar aniqlanmadi</b>\n"
+        "━━━━━━━━━━━━━━━━━━━━\n"
+        "Iltimos, ushbu kino uchun <b>KOD</b> va <b>NOM</b>ni yuboring:\n\n"
+        "📝 Format: <code>125 Forsaj 9</code>",
+        reply_markup=get_back_btn(),
+        parse_mode="HTML"
     )
 
 
@@ -79,17 +87,29 @@ async def process_manual_details(message: types.Message, state: FSMContext, sess
 
     if not match:
         return await message.answer(
-            "⚠️ Xato format! Avval raqam (kod), keyin nomini yozing.\nMisol: <code>125 Forsaj 9</code>")
+            "⚠️ <b>XATO FORMAT!</b>\n\n"
+            "Iltimos, avval raqam (kod), keyin nomini yozing.\n"
+            "Misol: <code>125 Forsaj 9</code>",
+            parse_mode="HTML"
+        )
 
     code = int(match.group(1))
-    title = match.group(2).strip()
+    title = match.group(2).strip().upper()
     data = await state.get_data()
 
     try:
         await session.execute(insert(Movie).values(code=code, title=title, file_id=data['file_id']))
         await session.commit()
         await state.clear()
-        await message.answer(f"🎯 <b>Muvaffaqiyatli saqlandi!</b>\n🆔 {code} | 🎬 {title}")
+
+        final_text = (
+            "🎯 <b>MUVAFFAQIYATLI SAQLANDI!</b>\n"
+            "━━━━━━━━━━━━━━━━━━━━\n"
+            "🆔 Kod: <code>{code}</code>\n"
+            "🎬 Nomi: <code>{title}</code>"
+        ).format(code=code, title=title)
+
+        await message.answer(final_text, reply_markup=get_back_btn(), parse_mode="HTML")
     except Exception:
         await session.rollback()
-        await message.answer("❌ Bazaga saqlashda xato (Kod band bo'lishi mumkin).")
+        await message.answer("❌ <b>BAZAGA SAQLASHDA XATO!</b>\nUshbu kod band bo'lishi mumkin.", parse_mode="HTML")

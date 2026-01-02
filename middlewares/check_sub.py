@@ -1,85 +1,88 @@
 import logging
-import time
-from typing import Callable, Dict, Any, Awaitable, Union
+from typing import Any, Awaitable, Callable, Dict, Union, List
+
 from aiogram import BaseMiddleware, Bot
-from aiogram.types import Message, CallbackQuery, TelegramObject
+from aiogram.types import Message, CallbackQuery, InlineKeyboardButton
+from aiogram.utils.keyboard import InlineKeyboardBuilder
+
 from config import config
-from keyboards.inline import subscription_keyboard
 
 
 class CheckSubMiddleware(BaseMiddleware):
-    def __init__(self):
-        self.cache = {}
-        super().__init__()
-
     async def __call__(
             self,
-            handler: Callable[[TelegramObject, Dict[str, Any]], Awaitable[Any]],
-            event: TelegramObject,
+            handler: Callable[[Union[Message, CallbackQuery], Dict[str, Any]], Awaitable[Any]],
+            event: Union[Message, CallbackQuery],
             data: Dict[str, Any]
     ) -> Any:
+        user = event.from_user
 
-        real_event = event.message or event.callback_query
-        if not real_event or not real_event.from_user:
+        # 1. Admin bo'lsa tekshiruvdan ozod qilish
+        if not user or user.id == config.ADMIN_ID:
             return await handler(event, data)
 
-        user_id = real_event.from_user.id
-        bot: Bot = data['bot']
+        bot: Bot = data["bot"]
+        not_joined_channels = []
 
-        # 1. Admin uchun istisno
-        if user_id == config.ADMIN_ID:
-            return await handler(event, data)
-
-        # 2. Muhim: "check_subs" bosilganda ham tekshiruvdan o'tishi kerak.
-        # Shuning uchun bu yerdagi eski "return await handler" qatorini olib tashladik.
-
-        # 3. Keshni tekshirish (faqat oddiy xabarlar uchun, Tasdiqlash tugmasi uchun emas)
-        current_time = time.time()
-        is_check_button = isinstance(real_event, CallbackQuery) and real_event.data == "check_subs"
-
-        if not is_check_button:
-            if user_id in self.cache and current_time - self.cache[user_id] < 60:
-                return await handler(event, data)
-
-        # 4. Kanal identifikatori
-        channel_id = config.CHANNEL_URL.split('/')[-1]
-        channel_id = f"@{channel_id}" if not channel_id.startswith('@') else channel_id
-
-        try:
-            member = await bot.get_chat_member(chat_id=channel_id, user_id=user_id)
-
-            if member.status in ["left", "kicked"]:
-                # Foydalanuvchi a'zo bo'lmagan bo'lsa
-                if is_check_button:
-                    await real_event.answer("❌ Siz hali a'zo bo'lmadingiz!", show_alert=True)
-
-                return await self._send_subscription_alert(real_event, [channel_id])
-
-            # Obuna bo'lgan bo'lsa keshga saqlaymiz
-            self.cache[user_id] = current_time
-            return await handler(event, data)
-
-        except Exception as e:
-            logging.error(f"⚠️ Subscription Check Error: {e}")
-            return await handler(event, data)
-
-    async def _send_subscription_alert(self, event: Union[Message, CallbackQuery], channels: list):
-        alert_text = (
-            "🔒 <b>BOTDAN FOYDALANISH CHEKLANGAN</b>\n"
-            "━━━━━━━━━━━━━━━━━━━━\n"
-            "Botimizning <b>Premium</b> funksiyalaridan foydalanish uchun rasmiy kanalimizga a'zo bo'lishingiz kerak.\n\n"
-            "📢 <b>Kanalimiz:</b> @android_notes_developer\n"
-            "━━━━━━━━━━━━━━━━━━━━\n"
-            "✨ <i>Obuna bo'lgach, 'Tasdiqlash' tugmasini bosing:</i>"
-        )
-        markup = subscription_keyboard(channels)
-
-        if isinstance(event, Message):
-            return await event.answer(alert_text, reply_markup=markup)
-        elif isinstance(event, CallbackQuery):
-            # Xabarni qayta tahrirlash (faqat kerak bo'lsa)
+        # 2. Dinamik tekshirish
+        for index, channel in enumerate(config.mandatory_channels, 1):
             try:
-                if event.message.text != alert_text:
-                    await event.message.edit_text(text=alert_text, reply_markup=markup)
-            except Exception:
-                pass
+                member = await bot.get_chat_member(
+                    chat_id=channel['id'],
+                    user_id=user.id
+                )
+                # Faqat a'zo bo'lmaganlarni yig'amiz
+                if member.status in ["left", "kicked"]:
+                    not_joined_channels.append({
+                        "index": index,
+                        "url": channel['url']
+                    })
+            except Exception as e:
+                # 🚨 MUHIM: Bot kanalni topa olmasa ham tugmani chiqarish kerak!
+                # Logga xatoni yozamiz, lekin foydalanuvchiga tugmani ko'rsatamiz
+                logging.error(f"❌ Kanalni tekshirish imkonsiz ({channel['id']}): {e}")
+                not_joined_channels.append({
+                    "index": index,
+                    "url": channel['url']
+                })
+
+        # 3. Agar obuna bo'lmagan kanallar bo'lsa
+        if not_joined_channels:
+            return await self._send_alert(event, not_joined_channels)
+
+        # 4. Hammasi joyida bo'lsa handlerga o'tish
+        return await handler(event, data)
+
+    async def _send_alert(self, event: Union[Message, CallbackQuery], not_joined: List[Dict]):
+        """Dinamik va chiroyli tugmalar bilan ogohlantirish"""
+
+        text = (
+            "⚠️ <b>BOTDAN FOYDALANISH UCHUN QOIDALAR</b>\n"
+            "━━━━━━━━━━━━━━━━━━━━\n"
+            "Botdan to'liq foydalanish uchun quyidagi kanallarga a'zo bo'lishingiz shart:\n\n"
+            "<i>Obuna bo'lgach '✅ Tekshirish' tugmasini bosing.</i>"
+        )
+
+        builder = InlineKeyboardBuilder()
+        for ch in not_joined:
+            builder.row(InlineKeyboardButton(
+                text=f"📌 {ch['index']}-kanalga obuna bo'lish",
+                url=ch['url']
+            ))
+
+        builder.row(InlineKeyboardButton(text="✅ Tekshirish", callback_data="check_subs"))
+
+        # HTML formatda yuborish
+        if isinstance(event, Message):
+            await event.answer(text, reply_markup=builder.as_markup(), parse_mode="HTML")
+        elif isinstance(event, CallbackQuery):
+            # Xabar matni bir xil bo'lsa xato bermasligi uchun tekshiruv
+            try:
+                if event.message.text != text:
+                    await event.message.edit_text(text, reply_markup=builder.as_markup(), parse_mode="HTML")
+            except:
+                # Agar edit qilishda xato bo'lsa (masalan rasm ustida bo'lsa), answer_video da bo'lgani kabi
+                await event.message.answer(text, reply_markup=builder.as_markup(), parse_mode="HTML")
+
+            await event.answer("⚠️ Obuna to'liq emas!", show_alert=True)
+        return
