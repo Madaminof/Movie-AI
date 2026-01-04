@@ -1,5 +1,6 @@
 import logging
 from aiogram import Router, types, F
+from aiogram.exceptions import TelegramBadRequest
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -10,70 +11,62 @@ from database.models import User, Movie
 
 router = Router()
 
+
 @router.callback_query(F.data == "admin_stats")
 async def show_stats(callback: types.CallbackQuery, session: AsyncSession):
-    """Admin panel uchun batafsil statistika Dashboardi"""
     try:
-        # 1. Ma'lumotlarni bazadan olish
-        total_users = await session.scalar(select(func.count(User.id))) or 0
-        total_movies = await session.scalar(select(func.count(Movie.id))) or 0
-        total_views = await session.scalar(select(func.sum(Movie.views))) or 0
+        from database.requests import get_admin_dashboard_stats
 
-        # Eng ko'p ko'rilgan TOP 5 kino (3 tadan 5 taga oshirdik, ko'rinish yaxshiroq bo'ladi)
-        top_movies_query = await session.execute(
-            select(Movie).order_by(Movie.views.desc()).limit(5)
-        )
-        top_movies = top_movies_query.scalars().all()
+        # 1. Ma'lumotlarni olish
+        total_users, total_movies, total_views, top_movies = await get_admin_dashboard_stats(session)
 
-        # 2. UI Dizayn (Dashboard formatida)
+        # 2. Matnni shakllantirish (Avvalgi UI dizayningiz)
         dashboard_text = (
-            "📊 <b>ADMINISTRATOR DASHBOARD</b>\n"
-            "━━━━━━━━━━━━━━━━━━━━\n\n"
+            "🚀 <b>TIZIM BOSHQARUV PANELI</b>\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n\n"
             "👥 <b>FOYDALANUVCHILAR</b>\n"
-            f"┣ Jami a'zolar: <code>{total_users:,}</code>\n"
-            f"┗ Bot holati: 🟢 <b>Faol ishlamoqda</b>\n\n"
-
-            "🎬 <b>KINO ARXIVI</b>\n"
-            f"┣ Filmlar soni: <code>{total_movies:,}</code> ta\n"
-            f"┗ Jami ko'rishlar: <code>{total_views:,}</code>\n\n"
-
-            "🔥 <b>TOP TRENDDAGI FILMLAR</b>\n"
-            "━━━━━━━━━━━━━━━━━━━━\n"
+            f"┣ 👤 Jami: <code>{total_users:,} nafar</code>\n"
+            f"┗ Status: 🟢 <b>Faol va Stabil</b>\n\n"
+            "🎬 <b>BOT KUTUBXONASI</b>\n"
+            f"┣ 🎞 Kinolar: <code>{total_movies:,} ta</code>\n"
+            f"┗ 👁 Ko'rishlar: <code>{total_views:,} marta</code>\n\n"
+            "🏆 <b>TOP-10 TRENDDAGI FILMLAR</b>\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n"
         )
 
         if top_movies:
-            medals = ["🥇", "🥈", "🥉", "🔹", "🔹"]
+            medals = ["🥇", "🥈", "🥉", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"]
             for i, m in enumerate(top_movies):
-                movie_title = m.title[:18] + ".." if len(m.title) > 18 else m.title
-                dashboard_text += (
-                    f"{medals[i]} <code>{m.code}</code> | {movie_title}\n"
-                    f"┗ 👁 <i>{m.views:,} marta ko'rilgan</i>\n"
-                )
-        else:
-            dashboard_text += "<i>⚠️ Ma'lumotlar mavjud emas</i>\n"
+                title = (m.title[:18] + "..") if len(m.title) > 18 else m.title
+                dashboard_text += f"{medals[i]} <code>{m.code}</code> | {title} | 👁 <code>{m.views}</code>\n"
 
         dashboard_text += (
-            "━━━━━━━━━━━━━━━━━━━━\n"
-            f"📅 <b>Sana:</b> <code>{datetime.now().strftime('%d.%m.%Y')}</code>\n"
-            f"🕒 <b>Vaqt:</b> <code>{datetime.now().strftime('%H:%M:%S')}</code>"
+            "━━━━━━━━━━━━━━━━━━━━━\n"
+            f"🛰 <b>Server:</b> <code>{datetime.now().strftime('%d.%m.%Y | %H:%M')}</code>"
         )
 
-        # 3. Tugmalar (Keyboard)
         builder = InlineKeyboardBuilder()
-        builder.row(types.InlineKeyboardButton(text="🔄 Yangilash", callback_data="admin_stats"))
-        builder.row(types.InlineKeyboardButton(text="🔙 Admin Menyuga Qaytish", callback_data="admin_menu"))
+        builder.row(
+            types.InlineKeyboardButton(text="🔄 Yangilash", callback_data="admin_stats"),
+            types.InlineKeyboardButton(text="🔙 Admin Menyu", callback_data="admin_menu")
+        )
 
-        # 4. Tahrirlash (Xavfsiz usulda)
+        # 3. ASOSIY QISM: Xavfsiz tahrirlash
         try:
             await callback.message.edit_text(
                 text=dashboard_text,
                 reply_markup=builder.as_markup(),
-                parse_mode="HTML"  # <--- HTML KAFOLATLANDI
+                parse_mode="HTML"
             )
-        except Exception:
-            # Agar tahrirlashda xato bo'lsa (matn bir xil bo'lsa), shunchaki xabar yuboramiz
-            await callback.answer("Statistika yangilandi 🔄")
+            await callback.answer("✅ Dashboard yangilandi")
+        except TelegramBadRequest as e:
+            if "message is not modified" in e.message:
+                # Agar ma'lumot bir xil bo'lsa, xato chiqarmaymiz, shunchaki xabar beramiz
+                await callback.answer("ℹ️ Ma'lumotlar o'zgarmagan", show_alert=False)
+            else:
+                # Boshqa turdagi BadRequest bo'lsa, uni log qilamiz
+                raise e
 
     except Exception as e:
-        logging.error(f"Admin statistika xatosi: {e}")
-        await callback.answer("❌ Ma'lumotlarni yuklashda xatolik!", show_alert=True)
+        logging.error(f"Admin stats error: {e}")
+        await callback.answer("❌ Statistikani yuklashda xatolik!", show_alert=True)
